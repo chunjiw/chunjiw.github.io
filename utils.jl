@@ -31,15 +31,10 @@ function hfun_listposts(categoryvector)
         url = "/$category/$ps/"
         surl = strip(url, '/')
         title = pagevar(surl, :title)
-        pubdate = pagevar(surl, :published)
-        if isnothing(pubdate)
-            date    = "-01"
-            days[i] = 1
-        else
-            date    = Date(pubdate, dateformat"d U Y")
-            days[i] = day(date)
-        end
-        lines[i] = "\n[$title]($url) $date \n"
+        pubdate = pagevar(surl, :date)
+        date    = pubdate
+        days[i] = day(date)
+        lines[i] = "\n$date [$title]($url)\n"
     end
     # sort by day
     foreach(line -> write(io, line), lines[sortperm(days, rev=true)])
