@@ -3,6 +3,9 @@
 <nav>
   <ul>
     <li><a href="/">Home</a></li>
+    {{ for (dir, cat) in categories }}
+      <li><a href="/{{ fill dir }}/">{{fill cat}}</a> </li>
+    {{ end }}
   </ul>
   <img src="/assets/hamburger.svg" id="menu-icon">
 </nav>
