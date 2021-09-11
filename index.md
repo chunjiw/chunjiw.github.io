@@ -1,1 +1,2 @@
-@def title = "CW Home"
+@def title = "CW Home Page"
+@def date = ""
