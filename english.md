@@ -1,3 +1,3 @@
 @def title = "English"
-@def date = ""
-{{ listposts english }}
+@def date = nothing
+<!-- {{ listposts english }} -->

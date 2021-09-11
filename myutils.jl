@@ -8,7 +8,7 @@ function generate_category_index(categories)
     for (dir, cat) in categories
         open("$dir.md", "w") do io
         write(io, """@def title = "$cat"\n""")
-        write(io, """@def date = ""\n""")
+        write(io, """@def date = nothing\n""")
         write(io, "{{ listposts $dir }}")
         end
     end
