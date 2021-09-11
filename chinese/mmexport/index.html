@@ -1,0 +1,67 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/basic.css"> <link rel=icon  href="/assets/favicon.svg"> <title>用 Bash 自动添加日期时间到微信图片</title> <header> <div class=blog-name ><a href="/">CW Site</a></div> <nav> <ul> <li><a href="/">Home</a> <li><a href="/chinese/">中文</a> <li><a href="/english/">English</a> </ul> <img src="/assets/hamburger.svg" id=menu-icon > </nav> </header> <h2 class=franklin-content  style="text-align:center">用 Bash 自动添加日期时间到微信图片</h2> <p class=franklin-content  style="text-align:center">2021-09-11</p> <div class=franklin-content ><div class=franklin-toc ><ol><li><a href="#缘起">缘起</a><li><a href="#日期时间信息还在么">日期时间信息还在么</a><li><a href="#添加与编辑图片内嵌的日期时间数据exif">添加与编辑图片内嵌的日期时间数据：Exif</a><li><a href="#bash_入场">Bash 入场</a><li><a href="#用_inotify_自动执行_bash_脚本">用 inotify 自动执行 Bash 脚本</a><li><a href="#更多">更多</a></ol></div> <h2 id="缘起"><a href="#缘起" class=header-anchor >缘起</a></h2> <p>用安卓手机保存微信图片之后，图片的内嵌信息比如拍摄时间地点会被全部删除掉， 文件名也被改为类似于 <code>mmexport1620967280xxx.jpg</code> 。 这样会导致某些图片管理器无法获得图片拍摄时间，以至于无法把这张图片显示在时间线上合适的位置。</p> <p>之前用谷歌照片的时候，谷歌会假设上传时间是拍摄时间，八九不离十； 但是现在我用的 Photoprism，虽然会根据图片文件修改时间来决定把图片保存在哪里，但却不会认为这个时间是拍摄时间，导致不能在日历中显示此图片。</p> <h2 id="日期时间信息还在么"><a href="#日期时间信息还在么" class=header-anchor >日期时间信息还在么</a></h2> <p>经过长时间的摸索，我发现其实微信图片的文件名中 <code>mmexport</code> 之后的数字是所谓的 <a href="https://www.epochconverter.com/">Epoch time</a> &#40;aka Unix epoch, Unix time, POSIX time or Unix timestamp&#41;，从中可以计算出图片生成时间，就是在微信 App 上点保存图片的时间。 虽然不是拍摄时间，但是，哎，八九不离十。</p> <h2 id="添加与编辑图片内嵌的日期时间数据exif"><a href="#添加与编辑图片内嵌的日期时间数据exif" class=header-anchor >添加与编辑图片内嵌的日期时间数据：Exif</a></h2> <p>Exif 是常见的图片内嵌数据格式标准。 很多工具可以编辑 Exif。 我的第一反应是写几行 Julia 代码来添加 Exif</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> ImageMagick
+<span class=hljs-keyword >using</span> Dates
+
+<span class=hljs-keyword >function</span> exifdt(file)
+	tag = <span class=hljs-string >&quot;exif:DateTime&quot;</span>
+	ImageMagick.magickinfo(file, tag)[tag]
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-keyword >function</span> namedt(file)
+	s = round(<span class=hljs-built_in >Int</span>, parse(<span class=hljs-built_in >Int</span>, file[<span class=hljs-keyword >end</span>-<span class=hljs-number >16</span>:<span class=hljs-keyword >end</span>-<span class=hljs-number >4</span>]) / <span class=hljs-number >1000</span>)
+	dt = unix2datetime(s)
+	str = Dates.format(dt, <span class=hljs-string >&quot;yyyy:mm:dd HH:MM:SS&quot;</span>)
+<span class=hljs-keyword >end</span>
+
+run(<span class=hljs-string >`exif <span class=hljs-variable >$file</span> --ifd 0 --tag DateTimeOriginal --set-value <span class=hljs-subst >$(namedt(file)</span>)`</span>)
+run(<span class=hljs-string >`exiftool &quot;-DateTimeOriginal=<span class=hljs-subst >$(namedt(file)</span>)&quot; <span class=hljs-variable >$file</span>`</span>)</code></pre> <p>明眼人可以看到，这段代码最后调用了其他工具来编辑 Exif： exif 和 exiftool。两个都挺好用。 Julia 在这里只是把 Epoch time 转成年月日的作用，感觉杀鸡用牛刀。</p> <h2 id="bash_入场"><a href="#bash_入场" class=header-anchor >Bash 入场</a></h2> <p>同样的事情完全可以用 Bash 来做。 用 Bash 的好处是几乎任何 Linux Machine 都有它，不用安装额外的软件。 最终代码如下：</p> <pre><code class="bash hljs">exifdt=$(exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> -t <span class=hljs-string >&quot;Date and Time&quot;</span>)
+<span class=hljs-keyword >if</span> [ -z <span class=hljs-string >&quot;<span class=hljs-variable >$exifdt</span>&quot;</span> ]; <span class=hljs-keyword >then</span>
+    <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;This image has no exif&quot;</span>
+    unixtime=<span class=hljs-string >&quot;<span class=hljs-variable >${FILE:8:10}</span>&quot;</span>
+    <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;unixtime from file name is <span class=hljs-variable >$unixtime</span>&quot;</span>
+    DATETIME=$(date -d @<span class=hljs-string >&quot;<span class=hljs-variable >$unixtime</span>&quot;</span> <span class=hljs-string >&quot;+%4Y:%m:%d %T&quot;</span>)
+    <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;corresponding UTC is <span class=hljs-variable >$DATETIME</span>&quot;</span>
+    exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> --ifd 0 --tag 0x132 --set-value <span class=hljs-string >&quot;<span class=hljs-variable >$DATETIME</span>&quot;</span> -c --output <span class=hljs-string >&quot;<span class=hljs-variable >$PROCESSED_DIR</span>&quot;</span><span class=hljs-string >&quot;<span class=hljs-variable >$FILE</span>&quot;</span>
+    rm <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span>
+<span class=hljs-keyword >else</span>
+    mv <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> <span class=hljs-string >&quot;$PROCESSED_DIR<span class=hljs-variable >$FILE</span>&quot;</span>
+    <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;Already have DateTime in exif, directly move to processed folder&quot;</span>
+<span class=hljs-keyword >fi</span>
+<span class=hljs-built_in >unset</span> exifdt</code></pre> <p>看着有点长，重要的只有两句：</p> <pre><code class="bash hljs"><span class=hljs-comment ># 查看图片有没有时间日期</span>
+exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> -t <span class=hljs-string >&quot;Date and Time&quot;</span>
+<span class=hljs-comment ># 如果没有，添加时间日期</span>
+exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> --ifd 0 --tag 0x132 --set-value <span class=hljs-string >&quot;<span class=hljs-variable >$DATETIME</span>&quot;</span> -c --output <span class=hljs-string >&quot;<span class=hljs-variable >$PROCESSED_DIR</span>&quot;</span><span class=hljs-string >&quot;<span class=hljs-variable >$FILE</span>&quot;</span></code></pre> <p>另外重要的一句是</p> <pre><code class="bash hljs"><span class=hljs-comment ># 根据文件名产生符合 Exif 格式的时间日期字符串</span>
+date -d @<span class=hljs-string >&quot;<span class=hljs-variable >$unixtime</span>&quot;</span> <span class=hljs-string >&quot;+%4Y:%m:%d %T&quot;</span></code></pre> <h2 id="用_inotify_自动执行_bash_脚本"><a href="#用_inotify_自动执行_bash_脚本" class=header-anchor >用 inotify 自动执行 Bash 脚本</a></h2> <p>虽然有 Bash 脚本，不能选择手动运行，太不方便。 需要做的是每当有新图片被保存，就对其做处理。 幸运的是 Linux 有一个很方便的工具 inotifytools，每当指定的文件或文件夹有什么风吹草动，它会释放信号。 inotifytools 提供两个功能：inotifywait 和 inotifywatch，侧重不同，这里用 inotifywait。这个命令能输出指定的信息，帮助运行上面的 Bash 脚本：</p> <pre><code class="bash hljs"><span class=hljs-meta >#!/bin/bash</span>
+
+PROCESSED_DIR=/your/processed/directory/
+
+inotifywait -m --timefmt <span class=hljs-string >&#x27;%m/%d/%y %H:%M:%S&#x27;</span> --format <span class=hljs-string >&#x27;%T %w %f %e&#x27;</span>\
+  --include mmexport[0-9]+ \
+  -e attrib \
+  /your/unprocessed/directory/ |
+
+<span class=hljs-keyword >while</span> <span class=hljs-built_in >read</span> -r DATE_NOT_USED TIME_NOT_USED DIR FILE EVENT; <span class=hljs-keyword >do</span>
+    mkdir -p <span class=hljs-string >&quot;<span class=hljs-variable >$PROCESSED_DIR</span>&quot;</span>
+    <span class=hljs-built_in >echo</span>
+    <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;File $DIR<span class=hljs-variable >$FILE</span> has event <span class=hljs-variable >$EVENT</span>&quot;</span>
+    sleep 5
+    exifdt=$(exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> -t <span class=hljs-string >&quot;Date and Time&quot;</span>)
+    <span class=hljs-keyword >if</span> [ -z <span class=hljs-string >&quot;<span class=hljs-variable >$exifdt</span>&quot;</span> ]; <span class=hljs-keyword >then</span>
+        <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;This image has no exif&quot;</span>
+        unixtime=<span class=hljs-string >&quot;<span class=hljs-variable >${FILE:8:10}</span>&quot;</span>
+        <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;unixtime from file name is <span class=hljs-variable >$unixtime</span>&quot;</span>
+        DATETIME=$(date -d @<span class=hljs-string >&quot;<span class=hljs-variable >$unixtime</span>&quot;</span> <span class=hljs-string >&quot;+%4Y:%m:%d %T&quot;</span>)
+        <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;corresponding UTC is <span class=hljs-variable >$DATETIME</span>&quot;</span>
+        exif <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> --ifd 0 --tag 0x132 --set-value <span class=hljs-string >&quot;<span class=hljs-variable >$DATETIME</span>&quot;</span> -c --output <span class=hljs-string >&quot;<span class=hljs-variable >$PROCESSED_DIR</span>&quot;</span><span class=hljs-string >&quot;<span class=hljs-variable >$FILE</span>&quot;</span>
+        rm <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span>
+    <span class=hljs-keyword >else</span>
+        mv <span class=hljs-string >&quot;$DIR<span class=hljs-variable >$FILE</span>&quot;</span> <span class=hljs-string >&quot;$PROCESSED_DIR<span class=hljs-variable >$FILE</span>&quot;</span>
+        <span class=hljs-built_in >echo</span> <span class=hljs-string >&quot;Already have DateTime in exif, directly move to processed folder&quot;</span>
+    <span class=hljs-keyword >fi</span>
+    <span class=hljs-built_in >unset</span> exifdt
+
+    /usr/<span class=hljs-built_in >local</span>/bin/docker-compose -f /path/to/docker-compose.yml <span class=hljs-built_in >exec</span> -T photoprism photoprism import
+<span class=hljs-keyword >done</span>
+
+<span class=hljs-comment ># event type that I didn&#x27;t use:</span>
+<span class=hljs-comment ># -e close_write </span>
+<span class=hljs-comment ># -e close -e moved_to</span></code></pre> <p>好啦，这下我每次保存微信图片后，这个脚本会自动运行，照片会自动显示在 Photoprism 中时间线上正确的位置。</p> <h2 id="更多"><a href="#更多" class=header-anchor >更多</a></h2> <ul> <li><p>创建 systemd unit 用来开机自动运行脚本</p> </ul> <div class=page-foot > <div class=copyright > &copy; Chunji Wang. Last modified: September 11, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div>
