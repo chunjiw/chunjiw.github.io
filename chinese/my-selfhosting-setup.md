@@ -1,7 +1,11 @@
 @def title = "我的私有服务器配置方案概述"
 @def date = Date(2021, 9, 5)
 
-# 我的私有服务器配置方案概述
+
+\toc
+
+---
+
 
 经过差不多一年半的折腾，目前我的私有服务器配置大致成型，基本没出过大问题，是时候写个概述了。
 
@@ -23,7 +27,7 @@ WiFi 和 Ethernet 相信大家至少会有一个，不必单独列出来了。
 - 云相册 - [Photoprism](https://photoprism.app/)
 - 云日历和电话簿 - [Baikal](https://github.com/sabre-io/Baikal/) + [DAVx~~~<sup>5</sup>~~~](https://www.davx5.com/)
 
-#### 智能家居 - Home Assistant
+### 智能家居 - Home Assistant
 
 我用的是开源智能家居管理系统 Home Assistant OS。
 Home Assistant 有软件版本和操作系统版本，我尝试了软件版本，发现功能不全，考虑到这个应用与其他应用不参合，就用了操作系统版本，安装在一个树莓派4上。
@@ -45,7 +49,7 @@ Home Assistant 有软件版本和操作系统版本，我尝试了软件版本�
 其中细节应另做文章细述。
 
 
-#### 云笔记 - TiddlyWiki
+### 云笔记 - TiddlyWiki
 
 这是我最依赖的应用。
 当初开始玩私有服务器，也是因为对这个应用的强烈需求。
@@ -58,7 +62,7 @@ Home Assistant 有软件版本和操作系统版本，我尝试了软件版本�
 
 
 
-#### 云存储 - Seafile
+### 云存储 - Seafile
 
 试验很多方案后决定使用 Seafile。
 
@@ -69,7 +73,7 @@ Seafile 现在好像都没有中文名字了，以前是叫海云云盘吗？我
 Seafile 的优点是快，可靠，对系统的要求低。缺点是安装不是很容易。
 在它之前我尝试过 NextCloud，名声比 Seafile 大多了，但是在树莓派上根本就跑不起来，被我抛弃。
 
-#### 云媒体 - Emby / Jellyfin
+### 云媒体 - Emby / Jellyfin
 
 有超多的私有云媒体应用可供选择，我最终选择了两个：Emby 和 Jellyfin。
 
@@ -79,7 +83,7 @@ Jellyfin 其实源于 Emby。Emby 采用 Freemium 模式，有一些功能要付
 两个都用，是因为 Jellyfin 还没有完全成熟，比如智能电视上没有 App，安卓的 App 很差；
 而 Emby 免费版本又有各种限制。
 
-#### 云相册 - Photoprism
+### 云相册 - Photoprism
 
 Photoprism!
 
@@ -93,7 +97,7 @@ Photoprism!
 
 Photoprism 作为谷歌相册的替代品，已经很令我满意了。
 
-#### 云日历和电话簿 - Baikal
+### 云日历和电话簿 - Baikal
 
 这两个东西简单却重要。我用的是 Baikal；在安卓手机上需要用一个叫做 DAVx~~~<sup>5</sup>~~~ 的 App 完成同步。
 
