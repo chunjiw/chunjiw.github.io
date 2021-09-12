@@ -15,7 +15,8 @@
 ================================================================== */
 
 html {
-  font-family: Helvetica, Arial, sans-serif, SimSun;
+  /* font-family: Helvetica, Arial, sans-serif, fzfangsong-z02sregular; */
+  font-family: Helvetica, Arial, sans-serif, fzfangsong-z02sregular;
   font-size: var(--normal);
   color: var(--text-color);
 }

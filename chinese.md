@@ -1,3 +1,3 @@
 @def title = "中文"
-@def date = nothing
+@def date = ""
 {{ listposts chinese }}
