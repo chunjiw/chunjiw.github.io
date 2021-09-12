@@ -5,7 +5,7 @@
 @font-face {
     font-family: 'fzfangsong-z02sregular';
     /* src: url('fangsong-GB2312.ttf'); */
-    src: url('/css/FZFangSong-Z02S Regular.ttf') format('truetype');
+    src: url('./FZFangSong-Z02S Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
