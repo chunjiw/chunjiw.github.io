@@ -80,7 +80,7 @@ date -d @"$unixtime" "+%4Y:%m:%d %T"
 ```
 
 ## 用 inotify 自动执行 Bash 脚本
-虽然有 Bash 脚本，不能选择手动运行，太不方便。
+虽然有 Bash 脚本，如果每次手动运行，太不方便。
 需要做的是每当有新图片被保存，就对其做处理。
 幸运的是 Linux 有一个很方便的工具 inotifytools，每当指定的文件或文件夹有什么风吹草动，它会释放信号。
 inotifytools 提供两个功能：inotifywait 和 inotifywatch，侧重不同，这里用 inotifywait。这个命令能输出指定的信息，帮助运行上面的 Bash 脚本：
