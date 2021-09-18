@@ -24,20 +24,19 @@ function hfun_listposts(categoryvector)
     io = IOBuffer()
     base = joinpath(category)
     posts = filter!(p -> endswith(p, ".md"), readdir(base))
-    days  = zeros(Int, length(posts))
+    dates  = Vector{Date}(undef, length(posts))
     lines = Vector{String}(undef, length(posts))
     for (i, post) in enumerate(posts)
         ps  = splitext(post)[1]
         url = "/$category/$ps/"
         surl = strip(url, '/')
         title = pagevar(surl, :title)
-        pubdate = pagevar(surl, :date)
-        date    = pubdate
-        days[i] = day(date)
+        date = pagevar(surl, :date)
+        dates[i] = date
         lines[i] = "\n$date [$title]($url)\n"
     end
     # sort by day
-    foreach(line -> write(io, line), lines[sortperm(days, rev=true)])
+    foreach(line -> write(io, line), lines[sortperm(dates, rev=true)])
     # markdown conversion adds `<p>` beginning and end but
     # we want to  avoid this to avoid an empty separator
     r = Franklin.fd2html(String(take!(io)), internal=true)

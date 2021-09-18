@@ -1,2 +1,2 @@
 @def title = "English"
-<!-- {{ listposts english }} -->
+ {{ listposts english }}
