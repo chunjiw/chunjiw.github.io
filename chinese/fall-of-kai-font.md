@@ -3,7 +3,15 @@
 @def description = "你还记得你上次看到楷体字是什么时候么？"
 ---
 
+@@img-small
 ![](/assets/300pxkanji.png)
+@@
+
+<!-- ~~~
+<div align="center">
+  <img src="/assets/300pxkanji.png">
+</div>
+~~~ -->
 
 你还记得上次看到楷体字是什么时候么？
 

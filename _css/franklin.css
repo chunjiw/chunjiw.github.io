@@ -244,13 +244,13 @@ td {
 .franklin-content img {
   width: 70%;
   text-align: center;
-  padding-left: 10%;
+  padding-left: 15%;
 }
 
 .franklin-content .img-small img {
-  width: 50%;
+  width: 40%;
   text-align: center;
-  padding-left: 20%;
+  padding-left: 30%;
 }
 
 /* ==================================================================
