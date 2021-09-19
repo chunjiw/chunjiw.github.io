@@ -13,7 +13,8 @@ website_descr = "CW Site Description"
 website_url   = "https://tlienart.github.io/FranklinTemplates.jl/"
 
 categories = [("chinese", "中文"),
-              ("english", "English")]
+              ("english", "English"),
+              ("about", "About")]
 
 +++
 
