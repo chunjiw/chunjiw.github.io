@@ -3,25 +3,43 @@
 
 <url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/english/index.html</loc>
-    <lastmod>2021-09-17</lastmod>
+    <lastmod>0001-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/chinese/fall-of-kai-font/index.html</loc>
+    <lastmod>2021-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/english/font-face/index.html</loc>
+    <lastmod>2021-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/about/index.html</loc>
+    <lastmod>2021-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/chinese/my-selfhosting-setup/index.html</loc>
-    <lastmod>2021-09-17</lastmod>
+    <lastmod>2021-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/index.html</loc>
-    <lastmod>2021-09-17</lastmod>
+    <lastmod>2021-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/404/index.html</loc>
-    <lastmod>2021-09-17</lastmod>
+    <lastmod>2021-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
@@ -33,7 +51,7 @@
 </url>
 <url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/chinese/mmexport/index.html</loc>
-    <lastmod>2021-09-17</lastmod>
+    <lastmod>2021-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
