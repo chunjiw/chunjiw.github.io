@@ -2,7 +2,6 @@
 <div class="blog-name"><a href="/">{{ website_title }}</a></div>
 <nav>
   <ul>
-    <li><a href="/">Home</a></li>
     {{ for (dir, cat) in categories }}
       <li><a href="/{{ fill dir }}/">{{fill cat}}</a> </li>
     {{ end }}

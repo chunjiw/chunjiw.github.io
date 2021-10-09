@@ -10,6 +10,10 @@ kbd {
 span.post-date {
   float: right;
   padding-left: 30px;
+}
+
+.post-date {
+  text-align: right;
   font-size:  90%;
   color: dimgrey;
 }

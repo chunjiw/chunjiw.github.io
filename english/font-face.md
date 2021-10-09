@@ -1,7 +1,9 @@
 @def title = "Add a customized font to your Franklin website"
 @def date = Date(2021, 9, 16)
 
-\toc
+# {{ title }}
+@@post-date{{ date }}@@
+
 
 ## Foreword
 

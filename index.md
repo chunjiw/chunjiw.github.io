@@ -1,1 +1,4 @@
-@def title = "CW Home Page"
+@def title = "Home"
+
+{{ listposts chinese }}
+

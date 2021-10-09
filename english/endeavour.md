@@ -1,6 +1,9 @@
 @def title = "Beyond Ubuntu: Endeavour OS"
 @def date = Date(2021, 10, 3)
 
+# {{ title }}
+@@post-date{{ date }}@@
+
 I've been using Ubuntu for years.
 While it is much better than Windows, it is not without flaws.
 Over the years I encountered a few glitches, minor problems that though not enough to push me away from Linux, made my life a little bit troublesome.

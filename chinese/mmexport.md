@@ -1,7 +1,11 @@
 @def title = "用 Bash 自动添加日期时间到微信图片"
 @def date = Date(2021, 9, 11)
 
+# {{ title }}
+@@post-date{{ date }}@@
+
 \toc
+
 
 ## 缘起
 
