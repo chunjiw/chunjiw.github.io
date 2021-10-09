@@ -8,9 +8,9 @@ mintoclevel = 2
 ignore = ["node_modules/"]
 
 generate_rss = true
-website_title = "CW Site"
-website_descr = "CW Site Description"
-website_url   = "https://tlienart.github.io/FranklinTemplates.jl/"
+website_title = "Chunji Wang"
+website_descr = "Chunji Wang's website"
+website_url   = "https://chunjiw.github.io"
 
 categories = [("chinese", "中文"),
               ("english", "English"),
