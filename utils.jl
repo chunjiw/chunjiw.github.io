@@ -33,7 +33,10 @@ function hfun_listposts(categoryvector)
         title = pagevar(surl, :title)
         date = pagevar(surl, :date)
         dates[i] = date
-        lines[i] = "\n$date [$title]($url)\n"
+        lines[i] = """~~~
+          <span class="post-date">$date</span>~~~
+          [$title]($url) \n
+        """
     end
     # sort by day
     foreach(line -> write(io, line), lines[sortperm(dates, rev=true)])

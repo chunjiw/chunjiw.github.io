@@ -1,1 +1,15 @@
-kbd {  border: 1px solid #666666;  border-radius: 4px;  padding: 2px 4px;  margin: 1px;  color: #444444;  text-decoration: none; } 
+kbd {
+  border: 1px solid #666666;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 1px;
+  color: #444444;
+  text-decoration: none;
+}
+
+span.post-date {
+  float: right;
+  padding-left: 30px;
+  font-size:  90%;
+  color: dimgrey;
+}
