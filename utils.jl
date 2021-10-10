@@ -26,31 +26,41 @@ end
 Plug in the list of blog posts contained in folder `category`.
 """
 function hfun_listposts(categoryvector)
-    category = categoryvector[1]
-    io = IOBuffer()
-    base = joinpath(category)
-    posts = filter!(p -> endswith(p, ".md"), readdir(base))
-    dates  = Vector{Date}(undef, length(posts))
-    lines = Vector{String}(undef, length(posts))
-    for (i, post) in enumerate(posts)
-        ps  = splitext(post)[1]
-        url = "/$category/$ps/"
-        surl = strip(url, '/')
-        title = pagevar(surl, :title)
-        date = pagevar(surl, :date)
-        dates[i] = date
-        showdate = category == "chinese" ?
-          @sprintf("%i月%i日", month(date), day(date)) :
-          Dates.format(date, "u d")
-        lines[i] = """~~~
-          <span class="post-date">$showdate</span>~~~
-          [$title]($url) \n
-        """
-    end
-    # sort by day
-    foreach(line -> write(io, line), lines[sortperm(dates, rev=true)])
-    # markdown conversion adds `<p>` beginning and end but
-    # we want to  avoid this to avoid an empty separator
-    r = Franklin.fd2html(String(take!(io)), internal=true)
-    return r
+  category = categoryvector[1]
+  io = IOBuffer()
+  base = joinpath(category)
+  posts = filter!(p -> endswith(p, ".md"), readdir(base))
+  dates  = Vector{Date}(undef, length(posts))
+  lines = Vector{String}(undef, length(posts))
+  for (i, post) in enumerate(posts)
+    ps  = splitext(post)[1]
+    url = "/$category/$ps/"
+    surl = strip(url, '/')
+    title = pagevar(surl, :title)
+    date = pagevar(surl, :date)
+    dates[i] = date
+    showdate = category == "chinese" ?
+      @sprintf("%i月%i日", month(date), day(date)) :
+      Dates.format(date, "u d")
+    lines[i] = """
+      ~~~<span class="post-date">$showdate</span>~~~
+      [$title]($url) \n
+    """
+  end
+  # sort by day
+  foreach(line -> write(io, line), lines[sortperm(dates, rev=true)])
+  # markdown conversion adds `<p>` beginning and end but
+  # we want to  avoid this to avoid an empty separator
+  r = Franklin.fd2html(String(take!(io)), internal=true)
+  return r
+end
+
+
+function hfun_filldate()
+  date = locvar("date")
+  if splitpath(locvar("fd_rpath"))[1] == "chinese"
+    @sprintf("%i年%i月%i日", year(date), month(date), day(date))
+  else
+    Dates.format(date, "u d, Y")
+  end
 end
