@@ -2,8 +2,6 @@
 @def date = Date(2018, 6, 17)
 @def description = "你还记得你上次看到楷体字是什么时候么？"
 
-# {{ title }}
-@@post-date{{ date }}@@
 
 @@img-small
 ![](/assets/300pxkanji.png)

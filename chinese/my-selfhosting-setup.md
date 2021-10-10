@@ -2,9 +2,6 @@
 @def date = Date(2021, 9, 5)
 
 
-# {{ title }}
-@@post-date{{ date }}@@
-
 \toc
 
 
