@@ -1,12 +1,17 @@
+using Printf
+
+
 function hfun_bar(vname)
   val = Meta.parse(vname[1])
   return round(sqrt(val), digits=2)
 end
 
+
 function hfun_m1fill(vname)
   var = vname[1]
   return pagevar("index", var)
 end
+
 
 function lx_baz(com, _)
   # keep this first line
@@ -14,6 +19,7 @@ function lx_baz(com, _)
   # do whatever you want here
   return uppercase(brace_content)
 end
+
 
 """
     {{ listposts }}
@@ -33,8 +39,11 @@ function hfun_listposts(categoryvector)
         title = pagevar(surl, :title)
         date = pagevar(surl, :date)
         dates[i] = date
+        showdate = category == "chinese" ?
+          @sprintf("%i月%i日", month(date), day(date)) :
+          Dates.format(date, "u d")
         lines[i] = """~~~
-          <span class="post-date">$date</span>~~~
+          <span class="post-date">$showdate</span>~~~
           [$title]($url) \n
         """
     end
