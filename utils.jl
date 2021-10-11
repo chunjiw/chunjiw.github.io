@@ -48,7 +48,18 @@ function hfun_listposts(categoryvector)
     """
   end
   # sort by day
-  foreach(line -> write(io, line), lines[sortperm(dates, rev=true)])
+  lines = lines[sortperm(dates, rev=true)]
+  dates = dates[sortperm(dates, rev=true)]
+  curryear = 9999
+  write(io, "@@post-list")
+  for (i,line) in enumerate(lines)
+    if year(dates[i]) < curryear
+      curryear = year(dates[i])
+      write(io, "\n $curryear \n\n")
+    end
+    write(io, line)
+  end
+  write(io, "@@")
   # markdown conversion adds `<p>` beginning and end but
   # we want to  avoid this to avoid an empty separator
   r = Franklin.fd2html(String(take!(io)), internal=true)
