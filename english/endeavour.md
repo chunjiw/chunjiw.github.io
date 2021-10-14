@@ -15,9 +15,10 @@ But it occurred to me then, why not try another distribution altogether?
 I've set up the machine such that I can install multiple systems, so I rolled up sleeves and installed Endeavour OS to replace the old Ubuntu. 
 Why Endeavour? 
 It is only second to MX Linux on distrowatch, and MX Linux is based on Debian, same as Ubuntu.
-So Endeavour should both be great and give me a fresh experience.
+So Endeavour should be my choise if I want some changes.
 
-Oh I'm so glad I was right! Now I am writing this article in Endeavour OS, everything feels great.
+Oh I'm so glad I chose Endeavours OS! Now I am writing this article in Endeavour OS, everything feels great.
+
 But let me talk about a few hurdles I need to overcome first.
 
 ### Thunderbolt
@@ -29,9 +30,13 @@ but I installed Xfce first, and Xfce did not prompt me anything.
 I needed to install `bolt` with 
 
 ```bash
-pacman -S bolt
+sudo pacman -S bolt
 ```
-and list thunderbolt devices with `boltctl list`, and do 
+and list thunderbolt devices with 
+```
+boltctl list
+```
+and identify my device, and do 
 
 ```
 boltctl enroll device-id
@@ -44,7 +49,7 @@ Then mouse and keyboard will work through thunderbolt.
 Turns out Xfce somehow couldn't find my monitor (the same thunderbolt port) as an audio output device.
 Very strange... Couldn't get Xfce to work, so I installed Gnome and it works fine!
 I'm already quite familiar with Gnome since it is the default on Ubuntu. 
-But since Endeavour is Arch, I got the most recent version, and it looks better than before.
+But since Endeavour is Arch based, I got the most recent version, and it looks better than before.
 
 ### X11 vs Wayland
 
@@ -66,13 +71,15 @@ Some places say `x-systemd.after=network-online.target` but it did nothing to my
 After fixing all problems, the system works like a charm, and really fast.
 
 Installing software is snappy,
-A few seconds most of the times.
-I expected it to be so but I am still quite happy!
+A few seconds most of the time.
+I expected it to be so but it is still a pleasant surprise!
 
 I also took this opportunity to learn some very basic tricks to do window tiling, so that I can reduce usage of mouse, to save my wrist:
-~~~<kbd>Win</kbd>+<kbd>←</kbd>~~~ and ~~~<kbd>Win</kbd>+<kbd>→</kbd>~~~ to snap to full height and 50% width, ~~~<kbd>Win</kbd>+<kbd>↑</kbd>~~~ to full screen or maximize and ~~~<kbd>Win</kbd>+<kbd>↓</kbd>~~~ to restore the window to it’s previous size.
-(I learned from [here](https://joshtronic.com/2018/09/09/why-i-dont-use-a-tiling-window-manager/))
+\kbd{Win} + \kbd{←} and \kbd{Win} + \kbd{→} to snap to full height and 50% width, \kbd{Win} + \kbd{↑} to full screen or maximize and \kbd{Win} + \kbd{↓} to restore the window to it’s previous size
+(I learned it from [here](https://joshtronic.com/2018/09/09/why-i-dont-use-a-tiling-window-manager/)).
+To move to another screen if dual monitor setup, use \kbd{Win} + \kbd{Shift}.
 
 With all these effort, I hope my productivity can shoot straight up 1 present!
 
-
+## Minor Updates
+- (10/13/2021) Zoom via AUR cannot share screens due to limitation of Zoom Wayland support -- it supports Arch but somehow Zoom does not recognize Endeavour OS as an Arch Linux distro. I guess that is right, as it is based on Arch, not Arch itself. So I just installed Zoom via flatpak, and it works well.
