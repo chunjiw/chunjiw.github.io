@@ -23,3 +23,7 @@ span.post-date {
   margin-left: auto;
   margin-right: auto;
 }
+
+.center {
+  text-align: center;
+}
