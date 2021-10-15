@@ -27,3 +27,7 @@ span.post-date {
 .center {
   text-align: center;
 }
+
+p {
+  text-align: justify;
+}
